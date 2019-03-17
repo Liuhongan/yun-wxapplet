@@ -1,0 +1,39 @@
+<style lang="less">
+.container {
+	height: 100vh;
+	width: 100vw;
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    box-sizing: border-box;
+    background: #F8F9FB;
+    margin: 0;
+    padding: 0;
+}
+</style>
+
+<script>
+import wepy from 'wepy';
+import 'wepy-async-function';
+
+export default class extends wepy.app {
+    config = {
+        pages: ['pages/index','pages/intro'],
+        window: {
+            backgroundTextStyle: 'light',
+            navigationBarBackgroundColor: '#F8F9FB',
+            navigationBarTitleText: '去水印',
+            navigationBarTextStyle: 'black',
+			disableScroll: true
+        }
+    };
+    constructor() {
+        super();
+        this.use('promisify');
+        this.use('requestfix');
+    }
+    onLaunch() {
+        console.log('on launch');
+    }
+}
+</script>

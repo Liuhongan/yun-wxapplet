@@ -1,0 +1,79 @@
+<style lang="less">
+.container {
+    font-size: 10pt;
+    padding: 10px;
+    .header {
+        .intro {
+            color: #008b8b;
+        }
+    }
+    .body {
+        margin-top: 50rpx;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        input {
+            width: 100%;
+            height: 50rpx;
+            border: 1rpx solid black;
+        }
+        button {
+            font-size: 10pt;
+            margin-top: 30px;
+            width: 100px;
+            height: 30px;
+            line-height: 30px;
+        }
+    }
+}
+</style>
+<template>
+    <view class="container">
+        <view class="header">
+            <text>将抖音的分享链接如： http://v.douyin.com/28fVA4/ 填入输入框，并按回车。</text>
+            <text class="intro" @tap="routeIntro">详细教程</text>
+        </view>
+        <view class="body">
+            <input placeholder="这是输入链接地址" value="{{url}}" auto-focus @input="inputData"></input>
+            <button @tap="transUrl">转换</button>
+        </view>
+
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: '抖音视频去水印'
+    };
+    data = {
+        text: 'hello wx',
+        url: ''
+    };
+    methods = {
+        routeIntro() {
+            wepy.navigateTo({
+                url: 'intro'
+            });
+        },
+        inputData(e) {
+            this.url = e.detail.value;
+        },
+        transUrl() {
+            wepy.request({
+                method: 'POST',
+                url: 'https://vson.top/api/get_id',
+                data: { url: this.url },
+            }).then(res=>{
+                console.log('2',res);
+            })
+        }
+    };
+    onLoad() {
+        console.log('onLoad');
+    }
+}
+</script>
