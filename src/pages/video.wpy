@@ -1,0 +1,73 @@
+<style lang="less">
+.container {
+    justify-content: center;
+    position: relative;
+    font-size: 12pt;
+    #vdo{
+        width: 100vw;
+        height: calc(100vw * 966 / 544);;
+    }
+    .save{
+        position: absolute;
+        right: 10rpx;
+        top: 30rpx;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        line-height: 70px;
+        z-index: 2;
+        background: white;
+        color: black;
+        text-align: center;
+        &:active{
+            opacity: 0.5;
+        }
+    }
+}
+</style>
+<template>
+    <view class="container">
+        <video src="{{videoUrl}}" id="vdo" autoplay=true loop=true ></video>
+        <view class="save" @tap="saveVideo">保存</view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Video extends wepy.page {
+    config = {
+        navigationBarTitleText: '播放视频'
+    };
+    data = {
+        baseUrl:'https://aweme.snssdk.com/aweme/v1/play/?video_id=v0200fa70000bh1upcigd9flcm8p2qeg&line=0&ratio=540p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0&h264=1&version_code=4.2.0&pass-region=1&pass-route=1&js_sdk_version=1.8.0.0&app_name=aweme&vid=CE2A1596-2458-41AB-921F-5E5D0052A6D7&app_version=4.2.0&device_id=54298088590&channel=App%20Store&mcc_mnc=46009&aid=1128&screen_width=1125&openudid=763e6b490461215dc8dd8e29d79856f96e474b32&os_api=18&ac=WIFI&os_version=12.0&device_platform=iphone&build_number=42011&device_type=iPhone10%2C3&iid=58294016914&idfa=386387BA-25BD-41E0-BD6C-A28D314C0283%20',
+        videoUrl:'',
+    };
+    methods={
+        saveVideo(){
+            wepy.showLoading({
+                title: '正在保存',
+            })
+            wepy.downloadFile({
+                url: `${this.videoUrl}`
+            }).then(res=>{
+                wepy.saveVideoToPhotosAlbum({
+                    filePath: res.tempFilePath,
+                }).then(()=>{
+                    wepy.hideLoading()
+                    wepy.showToast({
+                        title: '保存成功',
+                        icon: 'success',
+                        duration: 2000
+                    })
+                })
+            })
+        }
+    };
+    onLoad(e) {
+        let id=e.id;
+        let reg = new RegExp('(video_id=)(.*?)(&)');
+        this.videoUrl = this.baseUrl.replace(reg, '$1' + id + '$3');
+    }
+}
+</script>

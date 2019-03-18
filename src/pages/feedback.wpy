@@ -1,0 +1,25 @@
+<style lang="less">
+.container {
+}
+</style>
+<template>
+    <view class="container">
+
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+
+export default class Feedback extends wepy.page {
+    config = {
+        navigationBarTitleText: '意见反馈'
+    };
+    data = {
+        text: 'hello wx123'
+    };
+    onLoad() {
+        console.log('onLoad');
+    }
+}
+</script>
