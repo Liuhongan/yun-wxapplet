@@ -68,6 +68,13 @@ export default class Video extends wepy.page {
         let id=e.id;
         let reg = new RegExp('(video_id=)(.*?)(&)');
         this.videoUrl = this.baseUrl.replace(reg, '$1' + id + '$3');
+    };
+    onShareAppMessage(res){
+        return {
+            title: '抖音视频去水印',
+            path: '/page/index',
+            imageUrl: `../images/icon.jpg`
+        }
     }
 }
 </script>

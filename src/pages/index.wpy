@@ -130,6 +130,13 @@ export default class Index extends wepy.page {
     };
     onLoad() {
         // console.log('onLoad');
+    };
+    onShareAppMessage(res){
+        return {
+            title: '抖音视频去水印',
+            path: '/page/index',
+            imageUrl: `../images/icon.jpg`
+        }
     }
 }
 function Trim(str) {
