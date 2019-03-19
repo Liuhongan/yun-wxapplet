@@ -1,25 +1,66 @@
 <style lang="less">
 .container {
+    padding: 20rpx;
+    #text {
+        border: 1px solid black;
+        border-radius: 5rpx;
+        margin-top: 100rpx;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    button {
+        margin-top: 50px;
+        width: 100px;
+        height: 30px;
+        line-height: 30px;
+        background: black;
+        color: white;
+        &:active {
+            opacity: 0.5;
+        }
+    }
 }
 </style>
 <template>
     <view class="container">
-
+        <textarea name="" id="text" cols="30" rows="10" placeholder="有话直说~" value="{{content}}" @input="inputData"></textarea>
+        <button @tap="sendFeed">提交</button>
     </view>
 </template>
 
 <script>
 import wepy from 'wepy';
+import { baseUrl } from '../config';
 
 export default class Feedback extends wepy.page {
     config = {
         navigationBarTitleText: '意见反馈'
     };
     data = {
-        text: 'hello wx123'
+        content: ''
+    };
+    methods = {
+        inputData(e) {
+            this.content = e.detail.value;
+        },
+        sendFeed() {
+            wepy.showLoading({
+                title: ''
+            });
+            wepy.request({
+                method: 'POST',
+                url: `${baseUrl}/api/send_feed`,
+                data: { content: this.content }
+            }).then(() => {
+                wepy.hideLoading();
+                wepy.navigateBack({
+                    delta: 2
+                });
+            });
+        }
     };
     onLoad() {
-        console.log('onLoad');
+        // console.log('onLoad');
     }
 }
 </script>

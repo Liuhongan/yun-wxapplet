@@ -1,10 +1,28 @@
 <style lang="less">
 .container {
+    overflow-y: auto;
+    position: relative;
+    .intro{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        image{
+            width:100%;
+            margin-bottom: 20rpx;
+        }
+    }
 }
 </style>
 <template>
     <view class="container">
-
+        <view class="intro">
+            <image src="../images/intro/a.png" alt="" mode="widthFix"></image>
+            <image src="../images/intro/b.png" alt="" mode="widthFix"></image>
+            <image src="../images/intro/c.png" alt="" mode="widthFix"></image>
+        </view>
     </view>
 </template>
 
@@ -13,13 +31,13 @@ import wepy from 'wepy';
 
 export default class Intro extends wepy.page {
     config = {
-        navigationBarTitleText: '教程详情'
+        navigationBarTitleText: '详细教程'
     };
     data = {
         text: 'hello wx123'
     };
     onLoad() {
-        console.log('onLoad');
+        // console.log('onLoad');
     }
 }
 </script>

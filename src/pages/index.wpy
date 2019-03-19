@@ -31,32 +31,31 @@
             line-height: 30px;
             background: black;
             color: white;
-            &:active{
+            &:active {
                 opacity: 0.5;
             }
         }
-        .feedback{
+        .feedback {
             display: flex;
             flex-direction: column;
-            
-            .img{
+
+            .img {
                 width: 120rpx;
                 height: 120rpx;
                 border-radius: 50%;
                 margin-top: 200rpx;
             }
-            &:active{
+            &:active {
                 opacity: 0.5;
             }
         }
-
     }
 }
 </style>
 <template>
     <view class="container">
         <view class="header">
-            <text>将抖音的分享链接如： http://v.douyin.com/28fVA4/ 填入输入框，并按回车。</text>
+            <text selectable="{{true}}">将抖音的分享链接如： http://v.douyin.com/28fVA4/ 填入输入框，并按回车。</text>
             <text class="intro" @tap="routeIntro">详细教程</text>
         </view>
         <view class="body">
@@ -73,7 +72,7 @@
 
 <script>
 import wepy from 'wepy';
-
+import { baseUrl } from '../config.js';
 export default class Index extends wepy.page {
     config = {
         navigationBarTitleText: '抖音视频去水印'
@@ -88,7 +87,7 @@ export default class Index extends wepy.page {
                 url: 'intro'
             });
         },
-        routeFeedback(){
+        routeFeedback() {
             wepy.navigateTo({
                 url: 'feedback'
             });
@@ -97,23 +96,43 @@ export default class Index extends wepy.page {
             this.url = e.detail.value;
         },
         transUrl() {
-            // wepy.request({
-            //     method: 'POST',
-            //     url: 'https://vson.top/api/get_id',
-            //     data: { url: this.url },
-            // }).then(res=>{
-            //     console.log('res',res.data);
-            //     wepy.navigateTo({
-            //         url: `intro?id=${res.data}`
-            //     });
-            // })
-            wepy.navigateTo({
-                url: `video?id=v0200f180000bgovdhg1ahq6gmqknsf0`
+            if (!this.url) {
+                wepy.showToast({
+                    title: '不能输入空链接',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return;
+            }
+            let url = Trim(this.url);
+            wepy.showLoading({
+                title: ''
+            });
+            wepy.request({
+                method: 'POST',
+                url: `${baseUrl}/api/get_id`,
+                data: { url: url }
+            }).then(res => {
+                if (res.data == '' || res.data == 'error') {
+                    wepy.showToast({
+                        title: '可能链接不对哦~',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                    return;
+                }
+                wepy.hideLoading();
+                wepy.navigateTo({
+                    url: `video?id=${res.data}`
+                });
             });
         }
     };
     onLoad() {
-        console.log('onLoad');
+        // console.log('onLoad');
     }
+}
+function Trim(str) {
+    return str.replace(/(^\s*)|(\s*$)/g, '');
 }
 </script>

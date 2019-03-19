@@ -27,7 +27,7 @@
 </style>
 <template>
     <view class="container">
-        <video src="{{videoUrl}}" id="vdo" autoplay=true loop=true ></video>
+        <video src="{{videoUrl}}" id="vdo" autoplay="{{true}}" loop="{{true}}" ></video>
         <view class="save" @tap="saveVideo">保存</view>
     </view>
 </template>
