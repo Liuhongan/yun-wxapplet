@@ -1,0 +1,145 @@
+<style lang="less">
+.container {
+    font-size: 12pt;
+    padding: 30rpx;
+    justify-content: center;
+    padding-bottom: 220rpx;
+    .header {
+        .intro {
+            color: #008b8b;
+        }
+    }
+    .body {
+        margin-top: 50rpx;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 12pt;
+        textarea {
+            width: 100%;
+            // height: 60rpx;
+            border: 1px solid black;
+            border-radius: 5rpx;
+            padding: 10rpx;
+            box-sizing: border-box;
+        }
+        button {
+            margin-top: 30px;
+            width: 100px;
+            height: 30px;
+            line-height: 30px;
+            background: black;
+            color: white;
+            &:active {
+                opacity: 0.5;
+            }
+        }
+        .feedback {
+            display: flex;
+            flex-direction: column;
+
+            .img {
+                width: 120rpx;
+                height: 120rpx;
+                border-radius: 50%;
+                margin-top: 200rpx;
+            }
+            &:active {
+                opacity: 0.5;
+            }
+        }
+    }
+}
+</style>
+<template>
+    <view class="container">
+        <view class="header">
+            <text selectable="{{true}}">将抖音的分享链接如： http://v.douyin.com/28fVA4/ 填入输入框，并按回车。</text>
+            <text class="intro" @tap="routeIntro">详细教程</text>
+        </view>
+        <view class="body">
+            <textarea name="" id="text" cols="30" rows="10" placeholder="这里输入链接地址" value="{{url}}" @input="inputData"></textarea>
+            <button @tap="transUrl">转换</button>
+            <view class="feedback" @tap="routeFeedback">
+                <image src="../images/icon.jpg" alt="" class="img"></image>
+                <text>意见反馈</text>
+            </view>
+        </view>
+
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import { baseUrl } from '../config.js';
+export default class Start extends wepy.page {
+    config = {
+        navigationBarTitleText: '抖音视频去水印'
+    };
+    data = {
+        text: 'hello wx',
+        url: ''
+    };
+    methods = {
+        routeIntro() {
+            wepy.navigateTo({
+                url: 'intro'
+            });
+        },
+        routeFeedback() {
+            wepy.navigateTo({
+                url: 'feedback'
+            });
+        },
+        inputData(e) {
+            this.url = e.detail.value;
+        },
+        transUrl() {
+            if (!this.url) {
+                wepy.showToast({
+                    title: '不能输入空链接',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return;
+            }
+            let url = regHttp(this.url)
+            wepy.showLoading({
+                title: ''
+            });
+            wepy.request({
+                method: 'POST',
+                url: `${baseUrl}/api/get_id`,
+                data: { url: url }
+            }).then(res => {
+                if (res.data == '' || res.data == 'error') {
+                    wepy.showToast({
+                        title: '可能链接不对哦~',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                    return;
+                }
+                wepy.hideLoading();
+                wepy.navigateTo({
+                    url: `video?id=${res.data}`
+                });
+            });
+        }
+    };
+    onLoad() {
+        // console.log('onLoad');
+    };
+    onShareAppMessage(res){
+        return {
+            title: '抖音视频去水印',
+            path: '/pages/start',
+            imageUrl: `../images/icon.jpg`
+        }
+    }
+}
+function regHttp(str) {
+    return str.match(/http:\/\/(.*)\//g)[0]
+}
+</script>

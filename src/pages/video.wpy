@@ -72,7 +72,7 @@ export default class Video extends wepy.page {
     onShareAppMessage(res){
         return {
             title: '抖音视频去水印',
-            path: '/pages/index',
+            path: '/pages/start',
             imageUrl: `../images/icon.jpg`
         }
     }
