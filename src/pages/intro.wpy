@@ -42,7 +42,7 @@ export default class Intro extends wepy.page {
     onShareAppMessage(res){
         return {
             title: '抖音视频去水印',
-            path: '/page/index',
+            path: '/pages/index',
             imageUrl: `../images/icon.jpg`
         }
     }

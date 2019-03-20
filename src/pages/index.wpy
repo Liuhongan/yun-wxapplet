@@ -16,9 +16,9 @@
         align-items: center;
         justify-content: flex-start;
         font-size: 12pt;
-        input {
+        textarea {
             width: 100%;
-            height: 60rpx;
+            // height: 60rpx;
             border: 1px solid black;
             border-radius: 5rpx;
             padding: 10rpx;
@@ -59,7 +59,7 @@
             <text class="intro" @tap="routeIntro">详细教程</text>
         </view>
         <view class="body">
-            <input placeholder="这里输入链接地址" value="{{url}}" @input="inputData"></input>
+            <textarea name="" id="text" cols="30" rows="10" placeholder="这里输入链接地址" value="{{url}}" @input="inputData"></textarea>
             <button @tap="transUrl">转换</button>
             <view class="feedback" @tap="routeFeedback">
                 <image src="../images/icon.jpg" alt="" class="img"></image>
@@ -104,7 +104,7 @@ export default class Index extends wepy.page {
                 });
                 return;
             }
-            let url = Trim(this.url);
+            let url = regHttp(this.url)
             wepy.showLoading({
                 title: ''
             });
@@ -134,12 +134,12 @@ export default class Index extends wepy.page {
     onShareAppMessage(res){
         return {
             title: '抖音视频去水印',
-            path: '/page/index',
+            path: '/pages/index',
             imageUrl: `../images/icon.jpg`
         }
     }
 }
-function Trim(str) {
-    return str.replace(/(^\s*)|(\s*$)/g, '');
+function regHttp(str) {
+    return str.match(/http:\/\/(.*)\//g)[0]
 }
 </script>
